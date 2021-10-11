@@ -11,9 +11,9 @@ let app = connect()
 	//     res.end();
 	// })
 	.use(function (err, req, res, next) {
-		console.log(err)
-		res.end()
+		console.log(err);
+		res.end();
 	})
-	.listen(3080, function () {
-		console.log('Server running on 3080...');
-	})
+	.listen(3001, function () {
+		console.log('Server running on 3001...');
+	});
