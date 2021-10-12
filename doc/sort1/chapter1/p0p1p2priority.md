@@ -2878,7 +2878,7 @@ JS 遇到大量或耗时任务（网络请求等）会出现假死，
 
 4、主线程不断重复上面的步骤，也就是常说的 event loop(事件循环)
 
-h暂时忽略不显示ttps://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c4ebfae17a484276befa18316277f6bb~tplv-k3u1fbpfcp-watermark.awebp
+h暂时隐藏不显示ttps://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c4ebfae17a484276befa18316277f6bb~tplv-k3u1fbpfcp-watermark.awebp
 
 ❤ 请描述 event loop(事件循环/事件轮询)的机制，可画图。
 
@@ -4295,7 +4295,7 @@ webpack 的热更新需要依赖一个插件 HotModelReplacement.
 
 简版：因为 webpack 打包后的 bundle.js 文件并不具备热更新的能力，HMR 插件将 HMR Runtime 注入到 bundle.js 中，使 bundle.js 与 HMR Server 建立 webSocket 通信。
 
-![img](https://upload-images.jianshu.io/upload_images/4279446-19af56898345f459.png?imageMogr2/auto-orient/strip|imageView2/2/w/786/format/png)
+(h暂时隐藏不显示ttps://upload-images.jianshu.io/upload_images/4279446-19af56898345f459.png?imageMogr2/auto-orient/strip|imageView2/2/w/786/format/png)
 
 ### 1. 启动阶段 **①->②->A->B**
 
@@ -4336,7 +4336,7 @@ webpack 的热更新需要依赖一个插件 HotModelReplacement.
 
 作者：山野乔治
 链接：https://www.jianshu.com/p/a66bdbeb3ff1
-![img](https://upload-images.jianshu.io/upload_images/17121180-3df976b68030c6cb.png?imageMogr2/auto-orient/strip|imageView2/2/w/1157/format/png)
+(h暂时隐藏不显示ttps://upload-images.jianshu.io/upload_images/17121180-3df976b68030c6cb.png?imageMogr2/auto-orient/strip|imageView2/2/w/1157/format/png)
 
 https://www.jianshu.com/p/d37475f1bae1
 

@@ -77,7 +77,6 @@ function initAnchor(doc) {
 function initHead() {
 	$.get('/SUMMARY.md', function (data) {
 		var result = md.render(data);
-		console.log('result: ', result);
 		$('.header').append(result);
 		$('.header ul').addClass('g-clearfix');
 		$('.header a').click(function () {
