@@ -4153,13 +4153,67 @@ console.log(citiesC)
 
 递归是一种函数在满足一定条件之前调用自身的技术。只要可能，最好使用递归而不是循环。你必须注意这一点，浏览器不能处理太多递归和抛出错误。
 
+#### 组合
+
+在React中，我们将功能划分为小型可重用的纯函数，我们必须将所有这些可重用的函数放在一起，最终使其成为产品。 将所有较小的函数组合成更大的函数，最终，得到一个应用程序，这称为**组合**。
+
+实现组合有许多不同方法。 我们从Javascript中了解到的一种常见方法是链接。 链接是一种使用**点**表示法调用前一个函数的返回值的函数的方法。
+
+这是一个例子。 我们有一个`name`，如果`firstName`和`lastName`大于5个单词的大写字母，刚返回，并且打印名称的名称和长度。
+
+```
+const name = "Bhargav Bachina";
+
+const output = name.split(" ")
+    .filter(name => name.length > 5)
+    .map(val => {
+    val = val.toUpperCase();
+    console.log("Name:::::"+val);
+    console.log("Count::::"+val.length);
+    return val;
+});
+
+console.log(output)
+/*
+Name:::::BHARGAV
+Count::::7
+Name:::::BACHINA
+Count::::7
+[ 'BHARGAV', 'BACHINA' ]
+*/
+复制代码
+```
+
+在React中，我们使用了不同于链接的方法，因为如果有30个这样的函数，就很难进行链接。这里的目的是将所有更简单的函数组合起来生成一个更高阶的函数。
+
+```
+const name = compose(
+    splitmyName,
+    countEachName,
+    comvertUpperCase,
+    returnName
+)
+
+console.log(name);
+复制代码
+```
+
 
 
 ## A 组件基础
 
-01、你怎样理解 React?
+01、你怎样理解 React? REACT是什么
+
+React是一个简单的javascript UI库，用于构建高效、快速的用户界面。它是一个轻量级库，因此很受欢迎。它遵循组件设计模式、声明式编程范式和函数式编程概念，以使前端应用程序更高效。它使用虚拟DOM来有效地操作DOM。它遵循从高阶组件到低阶组件的单向数据流。
 
 ### 02、React 为什么要用 JSX? P0
+
+JSX是javascript的语法扩展。它就像一个拥有javascript全部功能的模板语言。它生成React元素，这些元素将在DOM中呈现。React建议在组件使用JSX。在JSX中，我们结合了javascript和HTML，并生成了可以在DOM中呈现的react元素。
+
+作者：Fundebug
+链接：https://juejin.cn/post/6844903857135304718
+
+
 
 03、如何避免生命周期中的坑
 04、类组件与函数式组件有什么区别
@@ -4173,6 +4227,19 @@ console.log(citiesC)
 09、React 事件为何绑定 this
 
 ### 10、受控组件 VS 非受控组件 P0
+
+受控组件是在 React 中处理输入表单的一种技术。表单元素通常维护它们自己的状态，而react则在组件的状态属性中维护状态。我们可以将两者结合起来控制输入表单。这称为受控组件。因此，在受控组件表单中，数据由React组件处理。
+
+这里有一个例子。当用户在 todo 项中输入名称时，调用一个javascript函数`handleChange`捕捉每个输入的数据并将其放入状态，这样就在 `handleSubmit`中的使用数据。
+
+作者：Fundebug
+链接：https://juejin.cn/post/6844903857135304718
+
+大多数情况下，建议使用受控组件。有一种称为非受控组件的方法可以通过使用`Ref`来处理表单数据。在非受控组件中，`Ref`用于直接从`DOM`访问表单值，而不是事件处理程序。
+
+我们使用`Ref`构建了相同的表单，而不是使用React状态。 我们使用`React.createRef()` 定义`Ref`并传递该输入表单并直接从`handleSubmit`方法中的`DOM`访问表单值。
+
+
 
 ### 11、setState 不可变值 P0
 
@@ -4188,8 +4255,66 @@ console.log(citiesC)
 
 #### redux P0
 
+Redux 是 React的一个状态管理库，它基于flux。 Redux简化了React中的单向数据流。 Redux将状态管理完全从React中抽象出来。
+
+在React中，组件连接到 redux ，如果要访问 redux，需要派出一个包含 `id`和负载(payload) 的 `action`。action 中的 `payload` 是可选的，action 将其转发给 Reducer。
+
+当`reducer`收到`action`时，通过 `swithc...case` 语法比较 `action` 中`type`。 匹配时，更新对应的内容返回新的 `state`。
+
+当`Redux`状态更改时，连接到`Redux`的组件将接收新的状态作为`props`。当组件接收到这些`props`时，它将进入更新阶段并重新渲染 UI。
+作者：Fundebug
+链接：https://juejin.cn/post/6844903857135304718
+
     store action reducer dispatch
     react-redux
+
+#### action creators
+
+#### 组件如何与 `redux` 进行连接
+
+通过react-redux中的provider将react应用包裹进去，向provider注入store，
+
+维护
+
+为了方便在组件中获取store中状态，可采用mapStateToProps, mapDispatchToProps
+
+对组件进行包装，可以子组件就能通过this.props获取了。
+
+**mapStateToProps**：此函数将`state`映射到 `props` 上，因此只要`state`发生变化，新 state 会重新映射到 `props`。 这是订阅`store`的方式。
+
+**mapDispatchToProps**：此函数用于将 `action creators` 绑定到你的`props` 。以便我们可以在第`12`行中使用This . `props.actions.sendemail()`来派发一个动作。
+
+`connect`和`bindActionCreators`来自 redux。 前者用于连接 store ，如第22行，后者用于将 action creators 绑定到你的 `props` ，如第20行。
+
+```js
+// import connect
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+
+// import action creators
+import * as userActions from '../../../actions/userActions';
+
+export class User extends React.Component {
+  
+    handleSubmit() {
+        // dispatch an action
+        this.props.actions.sendEmail(this.state.email);
+    }
+  
+}
+
+// you are mapping you state props
+const mapStateToProps = (state, ownProps) => ({user: state.user})
+// you are binding your action creators to your props
+const mapDispatchToProps = (dispatch) => ({actions: bindActionCreators(userActions, dispatch)})
+
+export default connect(mapStateToProps, mapDispatchToProps)(User);
+```
+
+作者：Fundebug
+链接：https://juejin.cn/post/6844903857135304718
+来源：稀土掘金
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 #### 单向数据流 P0
 
@@ -4232,6 +4357,16 @@ SCU purecomponent 和 memo immutable.js
 ### 3、react16 新特性 time slice 和 suspense P1
 
 ### 4、展示组件 VS 容器组件 p0
+
+函数/无状态/展示组件
+
+函数或无状态组件是一个纯函数，它可接受接受参数，并返回react元素。这些都是没有任何副作用的纯函数。这些组件没有状态或生命周期方法
+
+类或有状态组件具有状态和生命周期方可能通过`setState()`方法更改组件的状态。类组件是通过扩展React创建的。它在构造函数中初始化，也可能有子组件
+
+#### 容器组件
+
+容器组件是处理获取数据、订阅 redux 存储等的组件。它们包含展示组件和其他容器组件，但是里面从来没有html。
 
 ### 6、Portals P1 done
 
