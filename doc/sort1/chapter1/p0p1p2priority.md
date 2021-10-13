@@ -4042,6 +4042,119 @@ function unique(arr) {
 
 # React
 
+## 前置知识
+
+### 什么是声明式编程
+
+
+
+### 声明式编程 vs 命令式编程
+
+声明式编程的编写方式描述了应该做什么
+
+命令式编程描述了如何做
+
+```
+const numbers = [1,2,3,4,5];
+
+// 声明式
+const doubleWithDec = numbers.map(number => number * 2);
+
+console.log(doubleWithDec)
+
+// 命令式
+const doubleWithImp = [];
+for(let i=0; i<numbers.length; i++) {
+    const numberdouble = numbers[i] * 2;
+    doubleWithImp.push(numberdouble)
+}
+
+console.log(doubleWithImp)
+```
+
+### 函数式编程
+
+是声明式编程的一部分。
+
+核心概念
+
+#### 不可变性(immutability)
+
+不可改变函数外的数据
+
+#### 纯函数 复习
+
+纯函数是始终接受一个或多个参数并计算参数并返回数据或函数的函数。 它没有副作用，例如设置全局状态，更改应用程序状态，它总是将参数视为不可变数据。
+
+我想使用 **appendAddress** 的函数向`student`对象添加一个地址。 如果使用非纯函数，它没有参数，直接更改 `student` 对象来更改全局状态。
+
+使用纯函数，它接受参数，基于参数计算，返回一个新对象而不修改参数。
+
+```js
+let student = {
+    firstName: "testing",
+    lastName: "testing",
+    marks: 500
+}
+
+// 非纯函数
+function appendAddress() {
+    student.address = {streetNumber:"0000", streetName: "first", city:"somecity"};
+}
+
+console.log(appendAddress());
+
+// 纯函数
+function appendAddress(student) {
+    let copystudent = Object.assign({}, student);
+    copystudent.address = {streetNumber:"0000", streetName: "first", city:"somecity"};
+    return copystudent;
+}
+
+console.log(appendAddress(student));
+
+console.log(student);
+```
+
+#### 数据转换
+
+我们讲了很多关于不可变性的内容，如果数据是不可变的，我们如何改变数据。如上所述，我们总是生成原始数据的转换副本，而不是直接更改原始数据。
+
+再介绍一些 javascript内置函数，当然还有很多其他的函数，这里有一些例子。所有这些函数都不改变现有的数据，而是返回新的数组或对象。
+
+```
+let cities = ["irving", "lowell", "houston"];
+
+// we can get the comma separated list
+console.log(cities.join(','))
+// irving,lowell,houston
+
+// if we want to get cities start with i
+const citiesI = cities.filter(city => city[0] === "i");
+console.log(citiesI)
+// [ 'irving' ]
+
+// if we want to capitalize all the cities
+const citiesC = cities.map(city => city.toUpperCase());
+console.log(citiesC)
+// [ 'IRVING', 'LOWELL', 'HOUSTON' ]
+复制代码
+```
+
+
+
+#### 高阶函数
+
+高阶函数是将函数作为参数或返回函数的函数，或者有时它们都有。 这些高阶函数可以操纵其他函数。
+
+`Array.map，Array.filter和Array.reduce`是高阶函数，因为它们将函数作为参数。
+
+#### 递归 recursion
+
+递归是一种函数在满足一定条件之前调用自身的技术。只要可能，最好使用递归而不是循环。你必须注意这一点，浏览器不能处理太多递归和抛出错误。
+
+
+
 ## A 组件基础
 
 01、你怎样理解 React?
