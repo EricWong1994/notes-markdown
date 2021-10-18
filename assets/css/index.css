@@ -178,4 +178,11 @@ a:hover { opacity: 0.7; }
   text-decoration: none;
 }
 
+.beianhao {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  color: #333;
+}
 
