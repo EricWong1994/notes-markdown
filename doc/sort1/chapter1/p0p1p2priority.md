@@ -20,7 +20,7 @@ toread
 
 **手写 EventEmitter(发布订阅模式--简单版)**
 
-# tosearch
+# wangzhan tosearch
 
 -   检查是否有`Web Worker`任务，有则执行
 
@@ -4345,12 +4345,254 @@ SCU purecomponent 和 memo immutable.js
 
 ### 1、reackhook 的使用限制 P0
 
-2、useEffect 和 useLayoutEffect 的区别 P2
-3、谈谈 React Hook 的设计模式(原理？) P1
+### 2、useEffect 和 useLayoutEffect 的区别 P2
+
+https://kaiwu.lagou.com/course/courseInfo.htm?courseId=566#/detail/pc?id=5807
+
+如果你读过 React Hooks 的官方文档，你可能会发现这么一段描述：useLayoutEffect 的函数签名与 useEffect 相同。
+
+那什么是函数签名呢？函数签名就像我们在银行账号上签写的个人签名一样，独一无二，具有法律效应。以下面这段代码为例：
+
+
+MyObject.prototype.myFunction(value)
+应用 MDN 的描述，在 JavaScript 中的签名通常包括这样几个部分：
+
+**该函数是安装在一个名为 MyObject 的对象上；**
+
+**该函数安装在 MyObject 的原型上（因此它是一个实例方法，而不是一个静态方法/类方法）；**
+
+**该函数的名称是 myFunction；**
+
+**该函数接收一个叫 value 的参数，且没有进一步定义。**
+
+那为什么说 useEffect 与 useLayoutEffect 函数签名相同呢？它们俩的名字完全不同啊。这是因为在源码中，它们调用的是同一个函数。下面的这段代码是 React useEffect 与 useLayoutEffect 在 ReactFiberHooks.js 源码中的样子。
+
+```tsx
+// useEffect
+
+useEffect(
+
+   create: () => (() => void) | void,
+
+   deps: Array<mixed> | void | null,
+
+ ): void {
+
+   currentHookNameInDev = 'useEffect';
+
+   mountHookTypesDev();
+
+   checkDepsAreArrayDev(deps);
+
+   return mountEffect(create, deps);
+
+ },
+
+ 
+
+function mountEffect(
+
+	  create: () => (() => void) | void,
+
+	  deps: Array<mixed> | void | null,
+
+	): void {
+
+	  if (__DEV__) {
+
+	    // $FlowExpectedError - jest isn't a global, and isn't recognized outside of tests
+
+	    if ('undefined' !== typeof jest) {
+
+	      warnIfNotCurrentlyActingEffectsInDEV(currentlyRenderingFiber);
+
+	    }
+
+	  }
+
+	  return mountEffectImpl(
+	    UpdateEffect | PassiveEffect | PassiveStaticEffect,
+	    HookPassive,
+	    create,
+	    deps,
+	  );
+	}
+ 
+
+// useLayoutEffect
+
+useLayoutEffect(
+   create: () => (() => void) | void,
+   deps: Array<mixed> | void | null,
+ ): void {
+   currentHookNameInDev = 'useLayoutEffect';
+   mountHookTypesDev();
+   checkDepsAreArrayDev(deps);
+   return mountLayoutEffect(create, deps);
+ },
+
+function mountLayoutEffect(
+	  create: () => (() => void) | void,
+	  deps: Array<mixed> | void | null,
+	): void {
+	  return mountEffectImpl(UpdateEffect, HookLayout, create, deps);
+}
+```
+
+（其中 UpdateEffect、PassiveEffect、PassiveStaticEffect 就是 Fiber 的标记；HookPassive 和 HookLayout 就是当前 Effect 的标记。）
+
+可以看出：
+
+useEffect 先调用 mountEffect，再调用 mountEffectImpl；
+
+useLayoutEffect 会先调用 mountLayoutEffect，再调用 mountEffectImpl。
+
+那么你会发现最终调用的都是同一个名为 mountEffectImpl 的函数，入参一致，返回值也一致，所以函数签名是相同的。
+
+从代码角度而言，虽然是两个函数，但使用方式是完全一致的，甚至一定程度上可以相互替换。
+
+**运用效果**
+
+从运用效果上而言，useEffect 与 useLayoutEffect 两者都是**用于处理副作用**，这些副作用包括改变 DOM、设置订阅、操作定时器等。在函数组件内部操作副作用是不被允许的，所以需要使用这两个函数去处理。
+
+虽然看起来很像，但在执行效果上仍然有些许差异。React 官方团队甚至直言，如果不能掌握 useLayoutEffect，不妨直接使用 useEffect。在使用 useEffect 时遇到了问题，再尝试使用 useLayoutEffect。
+
+#### 不同点
+
+**使用场景**
+
+虽然官方团队给出了一个看似友好的建议，但我们并不能将这样模糊的结果作为正式答案回复给面试官。所以两者的差异在哪里？我们不如用代码来说明。下面通过一个案例来讲解两者的区别。
+
+先使用 useEffect 编写一个组件，在这个组件里面包含了两部分：
+
+- 组件展示内容，也就是 className 为 square 的部分会展示一个圆圈；
+- 在 useEffect 中操作修改 square 的样式，将它的样式重置到页面正中间。
+
+```tsx
+import React, { useEffect } from "react";
+
+import "./styles.css";
+
+export default () => {
+
+  useEffect(() => {
+
+    const greenSquare = document.querySelector(".square");
+
+    greenSquare.style.transform = "translate(-50%, -50%)";
+
+    greenSquare.style.left = "50%";
+
+    greenSquare.style.top = "50%";
+
+  });
+
+  return (
+
+    <div className="App">
+
+      <div className="square" />
+
+    </div>
+
+  );
+
+};
+```
+
+下面再补充一下样式文件，其中 App 样式中规中矩设置间距，square 样式主要设置圈儿的颜色与大小，接下来就可以看看它的效果了。
+
+```tsx
+.App {
+
+  text-align: center;
+
+  margin: 0;
+
+  padding: 0;
+
+}
+
+.square {
+
+  width: 100px;
+
+  height: 100px;
+
+  position: absolute;
+
+  top: 50px;
+
+  left: 0;
+
+  background: red;
+
+  border-radius: 50%;
+
+}
+```
+
+然后执行代码， 你就会发现红圈在渲染后出现了肉眼可见的瞬移，一下飘到了中间。
+
+那如果使用 useLayoutEffect 又会怎么样呢？其他代码都不需要修改，只需要像下面这样，将 useEffect 替换为 useLayoutEffect：
+
+接下来再看执行的效果，你会发现红圈是静止在页面中央，仿佛并没有使用代码强制调整样式的过程。
+
+虽然在实际的项目中，我们并不会这么粗暴地去调整组件样式，但这个案例足以说明两者的区别与使用场景。在 React 社区中最佳的实践是这样推荐的，大多数场景下可以直接使用**useEffect**，但是如果你的代码引起了页面闪烁，也就是引起了组件突然改变位置、颜色及其他效果等的情况下，就推荐使用**useLayoutEffect**来处理。那么总结起来就是如果有直接操作 DOM 样式或者引起 DOM 样式更新的场景更推荐使用 useLayoutEffect。
+
+那既然内部都是调用同一个函数，为什么会有这样的区别呢？在探讨这个问题时就需要从 Hooks 的设计原理说起了。
+
+**设计原理**
+
+首先可以看下这个图：
+
+![Drawing 4.png](https://s0.lgstatic.com/i/image2/M01/08/34/CgpVE2AKhP6AFNRnAAB9M55aj8I408.png)
+
+这个图表达了什么意思呢？首先所有的 Hooks，也就是 useState、useEffect、useLayoutEffect 等，都是导入到了 Dispatcher 对象中。在调用 Hook 时，会通过 Dispatcher 调用对应的 Hook 函数。所有的 Hooks 会按顺序存入对应 Fiber 的状态队列中，这样 React 就能知道当前的 Hook 属于哪个 Fiber，这里就是[上一讲](https://kaiwu.lagou.com/course/courseInfo.htm?courseId=566&sid=20-h5Url-0#/detail/pc?id=5806)所提到的**Hooks 链表**。但 Effect Hooks 会有些不同，它涉及了一些额外的处理逻辑。每个 Fiber 的 Hooks 队列中保存了 effect 节点，而每个 effect 的类型都有可能不同，需要在合适的阶段去执行。
+
+那么 LayoutEffect 与普通的 Effect 都是 effect，但标记并不一样，所以在调用时，就会有些许不同。回到前面的底层代码，你会发现只有第一个参数和第二个参数是不一样的，其中 UpdateEffect、PassiveEffect、PassiveStaticEffect 就是 Fiber 的标记；HookPassive 和 HookLayout 就是当前 Effect 的标记。如下代码所示：
+
+```tsx
+// useEffect 调用的底层函数
+function mountEffect(
+	  create: () => (() => void) | void,
+	  deps: Array<mixed> | void | null,
+	): void {
+	  if (__DEV__) {
+	    // $FlowExpectedError - jest isn't a global, and isn't recognized outside of tests
+	    if ('undefined' !== typeof jest) {
+	      warnIfNotCurrentlyActingEffectsInDEV(currentlyRenderingFiber);
+	    }
+	  }
+
+	  return mountEffectImpl(
+	    UpdateEffect | PassiveEffect | PassiveStaticEffect,
+	    HookPassive,
+	    create,
+	    deps,
+	  );
+	}
+// useLayoutEffect 调用的底层函数
+
+function mountLayoutEffect(
+	  create: () => (() => void) | void,
+	  deps: Array<mixed> | void | null,
+	): void {
+	  return mountEffectImpl(UpdateEffect, HookLayout, create, deps);
+	}
+```
+
+标记为 HookLayout 的 effect 会在所有的 DOM 变更之后同步调用，所以可以使用它来读取 DOM 布局并同步触发重渲染。但既然是同步，就有一个问题，计算量较大的耗时任务必然会造成阻塞，所以这就需要根据实际情况酌情考虑了。如果非必要情况下，使用标准的 useEffect 可以避免阻塞。这段代码在 react/packages/react-reconciler/src/ReactFiberCommitWork.new.js 中，有兴趣的同学可以研读一下。
+
+
+
+### 3、谈谈 React Hook 的设计模式(原理？) P1
 
 ## F、React 生态及其他未分类
 
 ### 1、React-Router 的实现原理及工作方式是什么 P0
+
+
 
 2、React 中你常用的工具库有哪些 P2
 
