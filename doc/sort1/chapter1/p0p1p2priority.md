@@ -4202,11 +4202,15 @@ console.log(name);
 
 ## A 组件基础
 
-01、你怎样理解 React? REACT是什么
+### 01、你怎样理解 React? REACT是什么
+
+me:
 
 React是一个简单的javascript UI库，用于构建高效、快速的用户界面。它是一个轻量级库，因此很受欢迎。它遵循组件设计模式、声明式编程范式和函数式编程概念，以使前端应用程序更高效。它使用虚拟DOM来有效地操作DOM。它遵循从高阶组件到低阶组件的单向数据流。
 
-### 02、React 为什么要用 JSX? P0
+### 02、React 为什么要用 JSX? P0 ❤
+
+me: 
 
 JSX是javascript的语法扩展。它就像一个拥有javascript全部功能的模板语言。它生成React元素，这些元素将在DOM中呈现。React建议在组件使用JSX。在JSX中，我们结合了javascript和HTML，并生成了可以在DOM中呈现的react元素。
 
@@ -4215,11 +4219,15 @@ JSX是javascript的语法扩展。它就像一个拥有javascript全部功能的
 
 
 
-03、如何避免生命周期中的坑
-04、类组件与函数式组件有什么区别
-05、如何设计 React 组件
-06、refs
-07、在 React 当中 Element 和 Component 有何区别？P1
+### 03、如何避免生命周期中的坑
+
+### 04、类组件与函数式组件有什么区别
+
+### 05、如何设计 React 组件
+
+### 06、refs
+
+### 07、在 React 当中 Element 和 Component 有何区别？P1
 
 ### 08、什么是高阶组件和常见的高阶组件 P0
 
