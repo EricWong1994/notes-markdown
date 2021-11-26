@@ -2939,6 +2939,14 @@ console.log($("#container").children.length);
 #### 宏任务
 
 宏任务包括 `script` ， `setTimeout` ，`setInterval` ，`setImmediate` ，`I/O` ，`UI rendering`。(Ajax DOM 事件)
+MessageChannel
+
+1. script(整体代码)
+2. setTimeout
+3. setInterval、setImmediate
+4. I/O
+5. postMessage
+6. MessageChannel
 
 ![image-20210915073344977](p0p1p2priority.assets/image-20210915073344977.png)
 
