@@ -1322,7 +1322,7 @@ let a = { b: 1 };
 
 更多关于 `new` 的内容可以阅读我写的文章 [聊聊 new 操作符](https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2FKieSun%2FDream%2Fissues%2F14)。
 
-### Q6: 对象遍历 和 数组遍历 P0
+### Q6: 对象遍历 和 数组遍历 P1
 
 ### Q7: 数组的哪些 API 是纯函数 m1
 
@@ -1691,7 +1691,7 @@ Person instanceof Function; // true
 
 当然了，之前也说了在 JS 中并不存在类，`class` 的本质就是构造函数。
 
-```
+```js
 class People {
 	constructor(name) {
 		this.name = name;
@@ -1699,7 +1699,7 @@ class People {
 }
 ```
 
-```
+```js
 class Student extends People {
 	constructor(name, number ) {
 		super(name);
@@ -1862,7 +1862,7 @@ this 的值是在执行时才能确认，定义时不能，this 指向函数的�
 
 如果有 new 关键字 this 指向生成的实例对象。
 
-最后种情况也就是 `bind` 这些改变上下文的 API 了，对于这些函数来说，`this` 取决于第一个参数，如果第一个参数为空，那么就是 `window`。
+最后几种情况也就是 `bind` 这些改变上下文的 API 了，对于这些函数来说，`this` 取决于第一个参数，如果第一个参数为空，那么就是 `window`。
 
 ### Q1-2 **new 运算符原理** M1p0 done
 
@@ -2515,7 +2515,7 @@ ajax(url)
 	.catch(err => console.error(err));
 ```
 
-#### 一次性插入多个 DOM 节点，如何处理
+### 一次性插入多个 DOM 节点，如何处理
 
 假如插入一个列表，缓存列表的 Length，字符串拼接，
 
