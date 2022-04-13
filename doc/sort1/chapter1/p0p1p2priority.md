@@ -5351,9 +5351,11 @@ Aceept 浏览器可接收的数据格式(Accept:text/html,application/xhtml+xml,
 
 详细见 shayu.md
 
+
+
 ## http 缓存机制 m1p0
 
-非首次进入页面，把没有必要重新网络请求获取的数据存起来的行为。
+缓存：非首次进入页面，把没有必要重新发起网络请求获取的数据存起来的行为。
 
 ### 缓存位置：
 
@@ -5496,7 +5498,7 @@ public 允许中间路由做缓存
 
 ![image-20211007112040153](p0p1p2priority.assets/image-20211007112040153.png)
 
-cache-control 如果没到过期时间的话：会从本地缓存直接返回，netWork 里显示 from diskcache
+cache-control 如果没到过期时间的话：会从本地缓存直接返回，netWork 里显示 from diskcache（不请求服务器)
 
 ![image-20211007112356774](p0p1p2priority.assets/image-20211007112356774.png)
 
