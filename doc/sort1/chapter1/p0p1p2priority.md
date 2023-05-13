@@ -2247,14 +2247,18 @@ itemIds=1,2,3,4
 
 项目对比页面中解析该字符串的代码如下所示：
 
-```
-const {itemIds} = ``this``.router.params; ``// taro 路由``const comItemIds = itemIds.split(``','``);
+```js
+const {itemIds} = ``this``.router.params; ``
+// taro 路由``const comItemIds = itemIds.split(``','``);
 ```
 
 而在美学辞典中，我需要拼装查询参数并跳转到项目对比卡页面。我的代码如下所示：
 
-```
-const url = ``new` `URL(targetUrl); ``// targetUrl 变量表示项目对比卡页面的 url``url.searchParams.set(``'itemIds'``, ``'1,2,3,4'``);``window.href = url.toString();
+``` js
+const url = ``new` `URL(targetUrl); ``
+// targetUrl 变量表示项目对比卡页面的 url
+``url.searchParams.set(``'itemIds'``, ``'1,2,3,4'``);
+``window.href = url.toString();
 ```
 
 但跳转后，项目对比卡页面展示异常。
